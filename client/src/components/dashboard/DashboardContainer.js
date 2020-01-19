@@ -10,13 +10,15 @@ class DashboardContainer extends Component {
 
     this.state = {
       loaded: 0,
-      isPlaying: false
+      isPlaying: false,
+      played: 0
     };
   }
 
   handleProgress = state => {
-    console.log(this.state);
-    this.setState(state);
+    if (this.state.loaded !== 1) {
+      this.setState(state);
+    }
   };
 
   handlePause = () => {
@@ -31,13 +33,29 @@ class DashboardContainer extends Component {
     });
   };
 
+  handleSeekMouseDown = e => {
+    this.setState({ seeking: true });
+  };
+
+  handleSeekChange = e => {
+    this.setState({ played: parseFloat(e.target.value + 1) });
+  };
+
+  handleSeekMouseUp = e => {
+    this.setState({ seeking: false });
+    this.player.seekTo(parseFloat(e.target.value));
+  };
+
+  ref = player => [(this.player = player)];
+
   render() {
-    let { loaded, isPlaying } = this.state;
+    let { loaded, isPlaying, played } = this.state;
     return (
       <div>
         <h1>You are logged in.</h1>
 
         <ReactPlayer
+          ref={this.ref}
           controls
           playing={isPlaying}
           onPause={this.handlePause}
@@ -48,6 +66,20 @@ class DashboardContainer extends Component {
 
         <h1>Loading Progress</h1>
         <progress max={1} value={loaded} />
+
+        <div>
+          <h1>Seek</h1>
+          <input
+            type="range"
+            min={0}
+            max={1}
+            step="any"
+            value={played}
+            onMouseDown={this.handleSeekMouseDown}
+            onChange={this.handleSeekChange}
+            onMouseUp={this.handleSeekMouseUp}
+          />
+        </div>
 
         <div>
           <button onClick={this.props.logoutUser}>Logout</button>
