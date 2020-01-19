@@ -18,18 +18,13 @@ router.post("/register", (req, res, next) => {
     return res.status(400).json(errors);
   }
 
-  let newUser = User.build({
+  let newUser = new User({
     email: req.body.email,
     username: req.body.username,
     password: req.body.password
   });
 
-  User.findOne({
-    where: Sequelize.or(
-      { email: req.body.email },
-      { username: req.body.username }
-    )
-  }).then(user => {
+  User.findOne({ email: req.body.email }).then(user => {
     if (user) {
       return res.status(400).json({
         userFound: "Username and/or email already exists"
@@ -66,9 +61,7 @@ router.post("/login", (req, res, next) => {
     return res.status(400).json(errors);
   }
 
-  User.findOne({
-    where: { username: req.body.username }
-  }).then(user => {
+  User.findOne({ username: req.body.username }).then(user => {
     if (!user) {
       return res.status(400).json({
         userNotFound: "Username and/or email not found"

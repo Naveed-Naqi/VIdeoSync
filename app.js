@@ -9,12 +9,12 @@
 // Module dependencies;
 const express = require("express");
 const path = require("path");
-const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const helmet = require("helmet");
 const compression = require("compression");
 const cors = require("cors");
 const passport = require("passport");
+const mongoose = require("mongoose");
 require("dotenv").config();
 
 // Utilities;
@@ -51,7 +51,17 @@ const configureApp = () => {
   app.use(express.json());
   app.use(express.urlencoded({ extended: false }));
   app.use(compression());
-  app.use(cookieParser());
+
+  const mongoUri = process.env.MONGO_URI;
+
+  mongoose
+    .connect(mongoUri, {
+      useNewUrlParser: true,
+      useCreateIndex: true,
+      useUnifiedTopology: true
+    })
+    .then(() => console.log("MongoDB successfully connected"))
+    .catch(err => console.log(err));
 
   // Passport middleware
   app.use(passport.initialize());
@@ -87,11 +97,11 @@ const configureApp = () => {
 
 // Main function declaration;
 const bootApp = async () => {
-  await syncDatabase();
+  //await syncDatabase();
   await configureApp();
 };
 
-// Main function invocation;
+// Main function invocation;3
 bootApp();
 
 // Export our app, so that it can be imported in the www file;

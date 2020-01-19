@@ -10,7 +10,7 @@ opts.secretOrKey = process.env.ACCESS_TOKEN_SECRET;
 module.exports = passport => {
   passport.use(
     new JwtStrategy(opts, (jwt_payload, done) => {
-      User.findByPk(jwt_payload.id)
+      User.findById(jwt_payload.id)
         .then(user => {
           if (user) {
             return done(null, user);
