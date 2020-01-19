@@ -26,21 +26,6 @@ const db = require("./database");
 // Our apiRouter;
 const apiRouter = require("./routes/index");
 
-// A helper function to sync our database;
-const syncDatabase = () => {
-  if (process.env.NODE_ENV === "production") {
-    db.sync();
-  } else {
-    db.sync().catch(err => {
-      if (err.name === "SequelizeConnectionError") {
-        createLocalDatabase();
-      } else {
-        console.log(err);
-      }
-    });
-  }
-};
-
 // Instantiate our express application;
 const app = express();
 
@@ -97,7 +82,6 @@ const configureApp = () => {
 
 // Main function declaration;
 const bootApp = async () => {
-  //await syncDatabase();
   await configureApp();
 };
 
