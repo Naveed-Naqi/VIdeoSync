@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 const { User } = require("../database/models");
 const bcrypt = require("bcryptjs");
-const Sequelize = require("sequelize");
 const jwt = require("jsonwebtoken");
 
 const validateRegisterInput = require("../validation/register");

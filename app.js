@@ -17,12 +17,6 @@ const passport = require("passport");
 const mongoose = require("mongoose");
 require("dotenv").config();
 
-// Utilities;
-const createLocalDatabase = require("./utilities/createLocalDatabase");
-
-// Our database instance;
-const db = require("./database");
-
 // Our apiRouter;
 const apiRouter = require("./routes/index");
 
