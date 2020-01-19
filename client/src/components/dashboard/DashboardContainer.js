@@ -61,12 +61,14 @@ class DashboardContainer extends Component {
           onPause={this.handlePause}
           onPlay={this.handlePlay}
           onProgress={this.handleProgress}
+          onSeek={this.handleSeek}
           url="http://localhost:1234/api/users/video"
         ></ReactPlayer>
 
         <h1>Loading Progress</h1>
         <progress max={1} value={loaded} />
 
+        {/* TODO: Will do more research about the react-player and determine if there is an easier way to do this without creating an external seek bar */}
         <div>
           <h1>Seek</h1>
           <input
