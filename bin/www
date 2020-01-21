@@ -17,11 +17,11 @@ io.on("connection", client => {
   console.log("Connection detected");
 
   client.on("pause", data => {
-    console.log("hi");
+    io.emit("pause", data);
   });
 
   client.on("play", data => {
-    console.log(data);
+    io.emit("play", data);
   });
 });
 

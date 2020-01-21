@@ -22,6 +22,10 @@ class DashboardContainer extends Component {
     this.socket.on("pause", data => {
       this.setState({ isPlaying: data });
     });
+
+    this.socket.on("play", data => {
+      this.setState({ isPlaying: data });
+    });
   }
 
   handleProgress = state => {
@@ -42,6 +46,8 @@ class DashboardContainer extends Component {
     this.setState({
       isPlaying: true
     });
+
+    this.socket.emit("play", true);
   };
 
   handleSeekMouseDown = e => {
