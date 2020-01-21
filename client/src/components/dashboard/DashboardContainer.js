@@ -4,6 +4,10 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import ReactPlayer from "react-player";
 import socketIOClient from "socket.io-client";
+import screenfull from 'screenfull'
+import { findDOMNode } from 'react-dom'
+
+import "./Dashboard.css";
 
 class DashboardContainer extends Component {
   constructor(props) {
@@ -12,7 +16,8 @@ class DashboardContainer extends Component {
     this.state = {
       loaded: 0,
       isPlaying: false,
-      played: 0
+      played: 0,
+      volume: 0,
     };
   }
 
@@ -41,6 +46,10 @@ class DashboardContainer extends Component {
       this.setState(state);
     }
   };
+
+  handleVolumeChange = e => {
+    this.setState({ volume: parseFloat(e.target.value) })
+  }
 
   handlePause = () => {
     this.setState({
@@ -72,24 +81,38 @@ class DashboardContainer extends Component {
     this.player.seekTo(parseFloat(e.target.value));
   };
 
+  handleClickFullscreen = () => {
+    screenfull.request(findDOMNode(this.player))
+  }
+
+  handlePlayPause = () => {
+    this.setState({ isPlaying: !this.state.isPlaying })
+  }
+
+  handleVolumeChange = e => {
+    this.setState({ volume: parseFloat(e.target.value) }, console.log(e.target.value))
+  }
+
   ref = player => [(this.player = player)];
 
   render() {
-    let { loaded, isPlaying, played } = this.state;
+    let { loaded, isPlaying, played, volume } = this.state;
     return (
       <div>
         <h1>You are logged in.</h1>
-
-        <ReactPlayer
-          ref={this.ref}
-          controls
-          playing={isPlaying}
-          onPause={this.handlePause}
-          onPlay={this.handlePlay}
-          onProgress={this.handleProgress}
-          onSeek={this.handleSeek}
-          url="http://localhost:1234/api/users/video"
-        ></ReactPlayer>
+        <div className="center">
+          <ReactPlayer
+            ref={this.ref}
+            controls
+            playing={isPlaying}
+            onPause={this.handlePause}
+            onPlay={this.handlePlay}
+            volume={volume}
+            onProgress={this.handleProgress}
+            onSeek={this.handleSeek}
+            url="http://localhost:1234/api/users/video"
+          ></ReactPlayer>
+        </div>
 
         <h1>Loading Progress</h1>
         <progress max={1} value={loaded} />
@@ -108,6 +131,14 @@ class DashboardContainer extends Component {
             onMouseUp={this.handleSeekMouseUp}
           />
         </div>
+
+        <div>
+          <h1>Volume</h1>
+          <input type='range' min={0} max={1} step='any' value={volume} onChange={this.handleVolumeChange} />
+        </div>
+
+        <button onClick={this.handlePlayPause}>{isPlaying ? 'Pause' : 'Play'}</button>
+        <button onClick={this.handleClickFullscreen}>Fullscreen</button>
 
         <div>
           <button onClick={this.props.logoutUser}>Logout</button>
