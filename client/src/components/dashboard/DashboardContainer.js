@@ -26,6 +26,14 @@ class DashboardContainer extends Component {
     this.socket.on("play", data => {
       this.setState({ isPlaying: data });
     });
+
+    this.socket.on("seek", data => {
+      this.player.seekTo(parseFloat(data));
+
+      this.setState({
+        played: parseFloat(data)
+      });
+    });
   }
 
   handleProgress = state => {
@@ -55,11 +63,12 @@ class DashboardContainer extends Component {
   };
 
   handleSeekChange = e => {
-    this.setState({ played: parseFloat(e.target.value + 1) });
+    this.setState({ played: parseFloat(e.target.value) });
   };
 
   handleSeekMouseUp = e => {
     this.setState({ seeking: false });
+    this.socket.emit("seek", e.target.value);
     this.player.seekTo(parseFloat(e.target.value));
   };
 

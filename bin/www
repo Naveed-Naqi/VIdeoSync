@@ -23,6 +23,10 @@ io.on("connection", client => {
   client.on("play", data => {
     io.emit("play", data);
   });
+
+  client.on("seek", data => {
+    io.emit("seek", data);
+  });
 });
 
 // Event listener for HTTP server "error" event;
