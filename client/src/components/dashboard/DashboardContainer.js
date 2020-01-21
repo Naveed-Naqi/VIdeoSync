@@ -3,6 +3,7 @@ import { logoutUser } from "../../actions/authActions";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import ReactPlayer from "react-player";
+import socketIOClient from "socket.io-client";
 
 class DashboardContainer extends Component {
   constructor(props) {
@@ -15,6 +16,14 @@ class DashboardContainer extends Component {
     };
   }
 
+  socket = socketIOClient("http://127.0.0.1:1234");
+
+  componentDidMount() {
+    this.socket.on("pause", data => {
+      this.setState({ isPlaying: data });
+    });
+  }
+
   handleProgress = state => {
     if (this.state.loaded !== 1) {
       this.setState(state);
@@ -25,6 +34,8 @@ class DashboardContainer extends Component {
     this.setState({
       isPlaying: false
     });
+
+    this.socket.emit("pause", false);
   };
 
   handlePlay = () => {
