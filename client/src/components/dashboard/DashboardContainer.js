@@ -21,7 +21,7 @@ class DashboardContainer extends Component {
     };
   }
 
-  socket = socketIOClient("http://172.26.1.122:3000/:1234");
+  socket = socketIOClient("http://54.196.177.179:1234");
 
   componentDidMount() {
     this.socket.on("pause", data => {
