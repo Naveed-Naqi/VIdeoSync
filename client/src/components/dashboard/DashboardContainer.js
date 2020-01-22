@@ -110,7 +110,7 @@ class DashboardContainer extends Component {
             volume={volume}
             onProgress={this.handleProgress}
             onSeek={this.handleSeek}
-            url="http://localhost:1234/api/users/video"
+            url="https://www.youtube.com/watch?v=AJXqzB75pW8"
           ></ReactPlayer>
         </div>
 
